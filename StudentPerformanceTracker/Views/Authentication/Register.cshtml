@@ -1,0 +1,94 @@
+﻿@{
+    ViewData["Title"] = "Register";
+}
+
+<style>
+    .register-container {
+        max-width: 400px;
+        margin: 50px auto;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        background-color: #fff;
+    }
+
+    .register-logo {
+        display: block;
+        margin: 0 auto 20px;
+        width: 250px;
+        height: auto;
+    }
+
+    .register-title {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 24px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .form-group label {
+        font-weight: bold;
+    }
+
+    .btn-primary {
+        width: 100%;
+        padding: 10px;
+        margin-top: 10px;
+        border-radius: 5px;
+    }
+
+    .btn-login {
+        background-color: #191970
+    }
+
+    .alert-danger {
+        margin-top: 20px;
+    }
+</style>
+
+<div class="register-container">
+    <img src="~/images/logo.png" alt="Logo" class="register-logo" />
+    <h5 class="register-title">Register</h5>
+
+    <form asp-action="Register" method="post" id="registerForm">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" name="username" class="form-control" id="username" required />
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" name="password" class="form-control" id="password" required />
+        </div>
+        <div class="form-group">
+            <label for="verifyPassword">Verify Password</label>
+            <input type="password" name="verifyPassword" class="form-control" id="verifyPassword" required />
+        </div>
+        <div id="passwordMismatch" class="alert alert-danger" style="display:none;">
+            Passwords do not match.
+        </div>
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger">@ViewBag.Error</div>
+        }
+
+        <button type="submit" class="btn btn-primary">Register</button>
+        <a asp-action="Login" class="btn btn-primary btn-login">Login</a>
+    </form>
+</div>
+
+<script>
+    document.getElementById('registerForm').addEventListener('submit', function (e) {
+        var password = document.getElementById('password').value;
+        var verifyPassword = document.getElementById('verifyPassword').value;
+        var passwordMismatch = document.getElementById('passwordMismatch');
+
+        if (password !== verifyPassword) {
+            e.preventDefault();
+            passwordMismatch.style.display = 'block';
+        } else {
+            passwordMismatch.style.display = 'none';
+        }
+    });
+</script>

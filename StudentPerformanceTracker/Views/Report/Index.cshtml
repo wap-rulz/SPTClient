@@ -1,0 +1,136 @@
+﻿@model IEnumerable<dynamic>
+
+@{
+    ViewData["Title"] = "Reports";
+}
+
+<style>
+    .reports-container {
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        background-color: #fff;
+    }
+
+    .reports-title {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 24px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .table {
+        width: 100%;
+        margin-top: 10px;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+
+        .table th, .table td {
+            padding: 8px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        .table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+    .grade-A-plus {
+        color: darkgreen;
+    }
+
+    .grade-A {
+        color: green;
+    }
+
+    .grade-A-minus {
+        color: lawngreen;
+    }
+
+    .grade-B-plus {
+        color: lightgreen;
+    }
+
+    .grade-B {
+        color: yellowgreen;
+    }
+
+    .grade-B-minus {
+        color: yellow;
+    }
+
+    .grade-C-plus {
+        color: orange;
+    }
+
+    .grade-C {
+        color: darkorange;
+    }
+
+    .grade-C-minus {
+        color: orangered;
+    }
+
+    .grade-D {
+        color: darkred;
+    }
+
+    .grade-F {
+        color: red;
+    }
+</style>
+
+
+<div class="reports-container">
+    <h2 class="reports-title">Reports</h2>
+
+    <h5>Study Session Summary</h5>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Module</th>
+                <th>Total Sessions</th>
+                <th>Total Duration</th>
+                <th>Predicted Grade</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var summary in Model)
+            {
+                int hours = summary.TotalDuration / 60;
+                int minutes = summary.TotalDuration % 60;
+                string formattedDuration = $"{hours}h {minutes}min";
+                string gradeClass = summary.PredictedGrade switch
+                {
+                    "A+" => "grade-A-plus",
+                    "A" => "grade-A",
+                    "A-" => "grade-A-minus",
+                    "B+" => "grade-B-plus",
+                    "B" => "grade-B",
+                    "B-" => "grade-B-minus",
+                    "C+" => "grade-C-plus",
+                    "C" => "grade-C",
+                    "C-" => "grade-C-minus",
+                    "D" => "grade-D",
+                    "F" => "grade-F"
+                };
+
+                <tr>
+                    <td>@summary.ModuleName</td>
+                    <td>@summary.TotalSessions</td>
+                    <td>@formattedDuration</td>
+                    <td class="@gradeClass">@summary.PredictedGrade</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="text-center">
+    <a asp-action="Graph" class="btn btn-secondary mt-3">View Graph</a>
+</div>

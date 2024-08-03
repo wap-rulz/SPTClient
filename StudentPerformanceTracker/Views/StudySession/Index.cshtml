@@ -1,0 +1,106 @@
+﻿@model IEnumerable<dynamic>
+
+@{
+    ViewData["Title"] = "Sessions";
+}
+
+<style>
+    .sessions-container {
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        background-color: #fff;
+    }
+
+    .sessions-title {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 24px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .table {
+        width: 100%;
+        margin-bottom: 20px;
+        border-collapse: collapse;
+    }
+
+        .table th, .table td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .table th {
+            background-color: #f8f8f8;
+            font-weight: bold;
+        }
+
+        .table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .table a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+            .table a:hover {
+                text-decoration: underline;
+            }
+
+    .btn-primary {
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+    }
+</style>
+
+<div class="sessions-container">
+    <h2 class="sessions-title">Sessions</h2>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Duration</th>
+                <th>Study Level</th>
+                <th>Module</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var session in Model)
+            {
+                int hours = session.Duration / 60;
+                int minutes = session.Duration % 60;
+                string formattedDuration = $"{hours}h {minutes}min";
+                <tr>
+                    <td>@session.Date.ToShortDateString()</td>
+                    <td>@formattedDuration</td>
+                    <td>@session.StudyLevel</td>
+                    <td>@session.ModuleName</td>
+                    <td>
+                        <a href="/StudySession/Edit/@session.Id">Edit</a> |
+                        <a href="#" onclick="confirmDelete('@session.Id', '@session.Date.ToShortDateString()')">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div>
+        <a asp-action="Create" class="btn btn-primary">Add New Session</a>
+    </div>
+</div>
+
+<script>
+    function confirmDelete(id, date) {
+        if (confirm(`Are you sure you want to delete study session on ${date}?`)) {
+            window.location.href = `/StudySession/Delete/${id}`;
+        }
+    }
+</script>

@@ -1,0 +1,85 @@
+﻿@model IEnumerable<dynamic>
+
+@{
+    ViewData["Title"] = "Study Summary Graph";
+}
+
+<style>
+    .reports-container {
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        background-color: #fff;
+    }
+
+    .reports-title {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 24px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .chart-container {
+        position: relative;
+        margin: 20px 0;
+    }
+
+    .btn {
+        margin-top: 20px;
+    }
+</style>
+
+<div class="reports-container">
+    <h2 class="reports-title">Reports</h2>
+
+    <h5>Study Summary Graph</h5>
+
+    <div class="chart-container">
+        <canvas id="studyHoursChart" width="400" height="200"></canvas>
+    </div>
+</div>
+
+<div class="text-center">
+    <a asp-action="Index" class="btn btn-secondary">View Summary</a>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        var ctx = document.getElementById('studyHoursChart').getContext('2d');
+        var moduleNames = @Html.Raw(Json.Serialize(ViewBag.ModuleNames));
+        var totalDuration = @Html.Raw(Json.Serialize(ViewBag.TotalDuration));
+
+        var studyHoursChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: moduleNames,
+                datasets: [{
+                    label: 'Total Study Duration (minutes)',
+                    data: totalDuration,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function (value) {
+                                var hours = Math.floor(value / 60);
+                                var minutes = value % 60;
+                                return hours + 'h ';
+                            },
+                            stepSize: 60
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+}

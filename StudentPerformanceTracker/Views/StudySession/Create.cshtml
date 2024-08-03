@@ -1,0 +1,96 @@
+﻿@model SPTModels.StudySession
+
+@{
+    ViewData["Title"] = "Create Session";
+}
+
+<style>
+    .create-session-container {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        background-color: #fff;
+    }
+
+    .create-session-title {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 24px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .form-group label {
+        font-weight: bold;
+    }
+
+    .form-control-inline {
+        display: inline-block;
+        width: auto;
+    }
+
+    .btn-primary {
+        width: 100%;
+        padding: 10px;
+        margin-top: 10px;
+        border-radius: 5px;
+    }
+</style>
+
+<div class="create-session-container">
+    <h2 class="create-session-title">Create Study Session</h2>
+    <hr />
+    <div class="row">
+        <div class="col-md-12">
+            <form asp-action="Create" method="post">
+                <div class="form-group">
+                    <label>Date</label>
+                    <input type="date" class="form-control" asp-for="Date" />
+                </div>
+                <div class="form-group">
+                    <label>Duration</label>
+                    <div>
+                        <select id="hours" class="form-control form-control-inline" asp-items="@ViewBag.Hours"></select>
+                        <select id="minutes" class="form-control form-control-inline" asp-items="@ViewBag.Minutes"></select>
+                    </div>
+                    <input type="hidden" class="form-control" asp-for="Duration" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="StudyLevel" class="control-label"></label>
+                    <select class="form-control" asp-for="StudyLevel" asp-items="@ViewBag.StudyLevels">
+                        <option value="">-- Select a study level --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Module</label>
+                    <select class="form-control" asp-for="ModuleId" asp-items="@(new SelectList(ViewBag.Modules, "Id", "Name"))">
+                        <option value="">-- Select a module --</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="text-center">
+    <a asp-action="Index" class="btn btn-secondary mt-3">Back to List</a>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('form').on('submit', function () {
+                var hours = parseInt($('#hours').val());
+                var minutes = parseInt($('#minutes').val());
+                var totalMinutes = (hours * 60) + minutes;
+                $('input[name="Duration"]').val(totalMinutes);
+            });
+        });
+    </script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

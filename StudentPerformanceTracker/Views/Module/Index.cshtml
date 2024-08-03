@@ -1,0 +1,99 @@
+﻿@model IEnumerable<dynamic>
+
+@{
+    ViewData["Title"] = "Modules";
+}
+
+<style>
+    .modules-container {
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        background-color: #fff;
+    }
+
+    .modules-title {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 24px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .table {
+        width: 100%;
+        margin-bottom: 20px;
+        border-collapse: collapse;
+    }
+
+        .table th, .table td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .table th {
+            background-color: #f8f8f8;
+            font-weight: bold;
+        }
+
+        .table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .table a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+            .table a:hover {
+                text-decoration: underline;
+            }
+
+    .btn-primary {
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+    }
+</style>
+
+<div class="modules-container">
+    <h2 class="modules-title">Modules</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Credits</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var module in Model)
+            {
+                <tr>
+                    <td>@module.Id</td>
+                    <td>@module.Name</td>
+                    <td>@module.Credits</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@module.Id">Edit</a> |
+                        <a href="#" onclick="confirmDelete('@module.Id', '@module.Name')">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div>
+        <a asp-action="Create" class="btn btn-primary">Add New Module</a>
+    </div>
+</div>
+
+<script>
+    function confirmDelete(id, name) {
+        if (confirm(`Are you sure you want to delete module '${name}'?`)) {
+            window.location.href = `/Module/Delete/${id}`;
+        }
+    }
+</script>
