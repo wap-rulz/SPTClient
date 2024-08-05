@@ -1,0 +1,3 @@
+[submodule "SPTModels"]
+	path = SPTModels
+	url = https://github.com/wap-rulz/SPTModels.git
